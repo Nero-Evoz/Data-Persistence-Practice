@@ -4,6 +4,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
@@ -26,16 +28,28 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    //Things to be saved
+    [Serializable]
+    class SaveData
     {
-        
+        public string highScoreName;
+        public int highScore;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SaveGame(int score)
     {
-        
+        SaveData data = new SaveData();
+        data.highScoreName = playerName;
+        data.highScore = score;
+
+        string json = JsonUtility.ToJson(data);
+        File.WriteAllText(Application.persistentDataPath + "savefile.json", json);
+        Debug.Log(json);
+    }
+
+    public void LoadGame()
+    {
+
     }
 
     //Loads game
