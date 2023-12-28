@@ -16,8 +16,13 @@ public class GameManager : MonoBehaviour
     public static string playerName;
     [SerializeField] TextMeshProUGUI playerNameInputBox;
 
+    //Current high score (from load)
+    public static int highScore;
+    public static string highScoreName;
+
     private void Awake()
     {
+        //LoadGame();
         //If there is already an instance, destroy new
         if (Instance != null)
         {
@@ -32,23 +37,33 @@ public class GameManager : MonoBehaviour
     [Serializable]
     class SaveData
     {
-        public string highScoreName;
-        public int highScore;
+        public string savedHighScoreName;
+        public int savedHighScore;
     }
 
+    //On end of game, if new score is higher than high score, save as new high score
     public void SaveGame(int score)
     {
         SaveData data = new SaveData();
-        data.highScoreName = playerName;
-        data.highScore = score;
+        data.savedHighScoreName = playerName;
+        data.savedHighScore = score;
 
         string json = JsonUtility.ToJson(data);
-        File.WriteAllText(Application.persistentDataPath + "savefile.json", json);
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
 
+    //On scene load, get high score data
     public void LoadGame()
     {
+        string path = Application.persistentDataPath + "/savefile.json";
 
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+            highScore = data.savedHighScore;
+            highScoreName = data.savedHighScoreName;
+        }
     }
 
     //Loads game
