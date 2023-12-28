@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     //Current high score (from load)
     public static int highScore;
     public static string highScoreName;
+    [SerializeField] TextMeshProUGUI titleHighScore;
+
 
     private void Awake()
     {
@@ -31,6 +33,12 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        LoadGame();
+        titleHighScore.text = "High Score: " + highScore + "\r\nBy: " + highScoreName;
     }
 
     //Things to be saved

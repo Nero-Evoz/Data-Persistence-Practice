@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -32,8 +33,6 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.Instance.LoadGame();
-
         //Set current name and score in text
         ScoreText.text = "Name: " + playerName + " --- Score: " + m_Points;
 
@@ -79,6 +78,15 @@ public class MainManager : MonoBehaviour
             {
                 congratsText.SetActive(true);
                 GameManager.Instance.SaveGame(m_Points);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                #if UNITY_EDITOR
+                    EditorApplication.ExitPlaymode();
+                #else
+                Application.Quit();
+                #endif
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
